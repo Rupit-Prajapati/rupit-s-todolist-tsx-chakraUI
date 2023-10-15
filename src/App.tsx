@@ -1,13 +1,6 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import Form from "./Form";
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  Select,
-  Stack
-} from "@chakra-ui/react";
+import { Box, Button, Flex, Input, Select, Stack } from "@chakra-ui/react";
 import TodoTaskList from "./TodoTaskList";
 
 interface Task {
@@ -19,29 +12,10 @@ interface Task {
 const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectFilter, setSelectFilter] = useState<string>("");
-  const [tasks, setTasks] = useState<Task[]>([
-    {
-      id: 1,
-      title: "working Task",
-      completed: true,
-    },
-    {
-      id: 2,
-      title: "Sample working Task",
-      completed: false,
-    },
-    {
-      id: 3,
-      title: "bought Task",
-      completed: true,
-    },
-    {
-      id: 4,
-      title: "working bought Task",
-      completed: false,
-    },
-  ]);
-
+  const [tasks, setTasks] = useState<Task[]>(() => {
+    const storedTasks = localStorage.getItem("tasks");
+    return storedTasks ? JSON.parse(storedTasks) : [];
+  });
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
@@ -72,6 +46,9 @@ const App: React.FC = () => {
       return titleMatches;
     }
   });
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   return (
     <Box

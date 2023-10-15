@@ -42,7 +42,7 @@ const TodoTaskList: React.FC<TodoTaskListProps> = ({
 
   const handleSave = (id: number) => {
     setEditWithId(null);
-
+    if (editWithText.trim() === "") return;
     const updatedTasks = tasks.map((task) =>
       task.id === id
         ? {
@@ -81,6 +81,7 @@ const TodoTaskList: React.FC<TodoTaskListProps> = ({
           )}
           <Flex
             justify="space-between"
+            align="center"
             gap={{ base: "10px", md: "15px" }}
             w="100%"
           >
